@@ -104,5 +104,23 @@ public class CalculatorTest {
                 Assertions.assertEquals(1000, additionResult);
             }
         }
+
+        @Nested
+        @DisplayName("Supports new line delimiter")
+        class NewLineDelimiter {
+            @Test
+            void returns_sum_for_numbers_delimited_by_new_line() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("5\n5");
+                Assertions.assertEquals(10, additionResult);
+            }
+
+            @Test
+            void supports_new_line_and_comma_delimiter_in_same_input() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("5\n5,5");
+                Assertions.assertEquals(15, additionResult);
+            }
+        }
     }
 }

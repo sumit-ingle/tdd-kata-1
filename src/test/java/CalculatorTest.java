@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Collections;
+
 public class CalculatorTest {
     @Nested
     @DisplayName("Addition")
@@ -57,6 +59,49 @@ public class CalculatorTest {
                 Calculator calculator = new Calculator();
                 int additionResult = calculator.add("1,2");
                 Assertions.assertEquals(3, additionResult);
+            }
+        }
+
+        @Nested
+        @DisplayName("More than two numbers")
+        class MoreThanTwoNumbers {
+            @Test
+            void returns_6_for_1comma2comma3() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("1,2,3");
+                Assertions.assertEquals(6, additionResult);
+            }
+
+            @Test
+            void returns_sum_for_4_numbers_delimited_by_comma() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("5,5,5,5");
+                Assertions.assertEquals(20, additionResult);
+            }
+
+            @Test
+            void returns_sum_for_5_numbers_delimited_by_comma() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("5,5,5,5,5");
+                Assertions.assertEquals(25, additionResult);
+            }
+
+            @Test
+            void returns_sum_for_10_numbers_delimited_by_comma() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("5,5,5,5,5,5,5,5,5,5");
+                Assertions.assertEquals(50, additionResult);
+            }
+
+            @Test
+            void returns_sum_for_100_numbers_delimited_by_comma() {
+                Calculator calculator = new Calculator();
+                var hundredNumbers = Collections.nCopies(100, "10");
+                String commaSeparatedHundredNumbers = String.join(",", hundredNumbers);
+
+                int additionResult = calculator.add(commaSeparatedHundredNumbers);
+
+                Assertions.assertEquals(1000, additionResult);
             }
         }
     }

@@ -36,7 +36,7 @@ public class CalculatorTest {
             }
 
             @ParameterizedTest
-            @ValueSource(strings = {"10", "200", "3333", "1234567890"})
+            @ValueSource(strings = {"10", "200", "600", "1000"})
             void returns_n_for_input_n(String number) {
                 Calculator calculator = new Calculator();
                 int additionResult = calculator.add(number);
@@ -169,6 +169,24 @@ public class CalculatorTest {
                     calculator.add("//;\n-1;-1");
                 });
                 Assertions.assertEquals("negatives not allowed: [-1, -1]", exception.getMessage());
+            }
+        }
+
+        @Nested
+        @DisplayName("Ignore numbers greater than 1000")
+        class NumbersGreaterThan1000 {
+            @Test
+            void returns_0_for_1001() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("1001");
+                Assertions.assertEquals(0, additionResult);
+            }
+
+            @Test
+            void returns_2_for_2comma1001() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("2,1001");
+                Assertions.assertEquals(2, additionResult);
             }
         }
     }

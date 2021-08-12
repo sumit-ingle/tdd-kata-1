@@ -27,7 +27,10 @@ public class Calculator {
     }
 
     private int calculateSum(String delimitedNumbers, String delimiterRegex) {
-        List<Integer> parsedNumbers = stream(delimitedNumbers.split(delimiterRegex)).map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> parsedNumbers = stream(delimitedNumbers.split(delimiterRegex))
+                .map(Integer::parseInt)
+                .filter(number -> number <= 1000)
+                .collect(Collectors.toList());
         validateNegativeNumbers(parsedNumbers);
         return parsedNumbers.stream().mapToInt(number -> number).sum();
     }

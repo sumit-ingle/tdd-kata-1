@@ -28,7 +28,7 @@ public class Calculator {
     }
 
     private boolean containsCustomDelimiterSyntax(String numbers) {
-        return numbers.matches("//.\\n.*");
+        return numbers.matches("//.*\\n.*");
     }
 
     private void validateNegativeNumbers(List<Integer> numbers) {

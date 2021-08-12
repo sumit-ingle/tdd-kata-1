@@ -140,5 +140,36 @@ public class CalculatorTest {
                 Assertions.assertEquals(3, additionResult);
             }
         }
+
+        @Nested
+        @DisplayName("Negative numbers")
+        class NegativeNumbers {
+            @Test
+            void throws_exception_for_a_negative_number() {
+                Calculator calculator = new Calculator();
+                Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                    calculator.add("-1");
+                });
+                Assertions.assertEquals("negatives not allowed: [-1]", exception.getMessage());
+            }
+
+            @Test
+            void throws_exception_for_two_negative_numbers_delimited_by_comma() {
+                Calculator calculator = new Calculator();
+                Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                    calculator.add("-1,-1");
+                });
+                Assertions.assertEquals("negatives not allowed: [-1, -1]", exception.getMessage());
+            }
+
+            @Test
+            void throws_exception_for_negative_numbers_with_custom_delimiter() {
+                Calculator calculator = new Calculator();
+                Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                    calculator.add("//;\n-1;-1");
+                });
+                Assertions.assertEquals("negatives not allowed: [-1, -1]", exception.getMessage());
+            }
+        }
     }
 }

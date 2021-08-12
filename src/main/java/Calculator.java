@@ -1,6 +1,8 @@
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 
@@ -11,14 +13,7 @@ public class Calculator {
         if (containsCustomDelimiterSyntax(numbers)) {
             return addUsingCustomDelimiter(numbers);
         }
-        if (containsDefaultDelimiters(numbers)) {
-            return getSum(numbers, "[\\n,]");
-        }
-        return Integer.parseInt(numbers);
-    }
-
-    private boolean containsDefaultDelimiters(String numbers) {
-        return numbers.contains(",") || numbers.contains("\n");
+        return calculateSum(numbers, "[\\n,]");
     }
 
     private boolean containsCustomDelimiterSyntax(String numbers) {
@@ -28,10 +23,19 @@ public class Calculator {
     private int addUsingCustomDelimiter(String numbers) {
         String customDelimiter = StringUtils.substringBetween(numbers, "//", "\n");
         String delimitedNumbers = StringUtils.substringAfter(numbers, "\n");
-        return getSum(delimitedNumbers, Pattern.quote(customDelimiter));
+        return calculateSum(delimitedNumbers, Pattern.quote(customDelimiter));
     }
 
-    private int getSum(String delimitedNumbers, String delimiterRegex) {
-        return stream(delimitedNumbers.split(delimiterRegex)).mapToInt(Integer::parseInt).sum();
+    private int calculateSum(String delimitedNumbers, String delimiterRegex) {
+        List<Integer> parsedNumbers = stream(delimitedNumbers.split(delimiterRegex)).map(Integer::parseInt).collect(Collectors.toList());
+        validateNegativeNumbers(parsedNumbers);
+        return parsedNumbers.stream().mapToInt(number -> number).sum();
+    }
+
+    private void validateNegativeNumbers(List<Integer> numbers) {
+        List<Integer> negativeNumbers = numbers.stream().filter((number) -> number < 0).collect(Collectors.toList());
+        if (negativeNumbers.size() > 0) {
+            throw new IllegalArgumentException("negatives not allowed: " + negativeNumbers);
+        }
     }
 }

@@ -174,6 +174,26 @@ public class CalculatorTest {
                     Assertions.assertEquals(15, additionResult);
                 }
             }
+
+            @Test
+            void supports_2_delimiters_each_with_length_3() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("//[***][;;;]\n1***2;;;3");
+                Assertions.assertEquals(6, additionResult);
+            }
+
+            @Test
+            void supports_3_delimiters_each_with_different_lengths() {
+                Calculator calculator = new Calculator();
+                String twentyExclamations = "!".repeat(10);
+                String twentyAsterisks = "*".repeat(20);
+                String twentyPounds = "#".repeat(30);
+
+                String inputString = String.format("//[%1$s][%2$s][%3$s]\n1" + "%1$s" + "2" + "%2$s" + "3" + "%3$s" + "4", twentyAsterisks, twentyExclamations, twentyPounds);
+                int additionResult = calculator.add(inputString);
+
+                Assertions.assertEquals(10, additionResult);
+            }
         }
 
         @Nested
@@ -182,27 +202,21 @@ public class CalculatorTest {
             @Test
             void throws_exception_for_a_negative_number() {
                 Calculator calculator = new Calculator();
-                Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-                    calculator.add("-1");
-                });
+                Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> calculator.add("-1"));
                 Assertions.assertEquals("negatives not allowed: [-1]", exception.getMessage());
             }
 
             @Test
             void throws_exception_for_two_negative_numbers_delimited_by_comma() {
                 Calculator calculator = new Calculator();
-                Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-                    calculator.add("-1,-1");
-                });
+                Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> calculator.add("-1,-1"));
                 Assertions.assertEquals("negatives not allowed: [-1, -1]", exception.getMessage());
             }
 
             @Test
             void throws_exception_for_negative_numbers_with_custom_delimiter() {
                 Calculator calculator = new Calculator();
-                Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-                    calculator.add("//;\n-1;-1");
-                });
+                Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> calculator.add("//;\n-1;-1"));
                 Assertions.assertEquals("negatives not allowed: [-1, -1]", exception.getMessage());
             }
         }

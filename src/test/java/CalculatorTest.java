@@ -19,7 +19,7 @@ public class CalculatorTest {
         }
 
         @Nested
-        @DisplayName("Single Number")
+        @DisplayName("single number")
         class SingleNumber {
             @Test
             void returns_1_for_input_1() {
@@ -45,7 +45,7 @@ public class CalculatorTest {
         }
 
         @Nested
-        @DisplayName("Two Numbers")
+        @DisplayName("Two numbers")
         class TwoNumbers {
             @Test
             void returns_2_for_1comma1() {
@@ -120,6 +120,24 @@ public class CalculatorTest {
                 Calculator calculator = new Calculator();
                 int additionResult = calculator.add("5\n5,5");
                 Assertions.assertEquals(15, additionResult);
+            }
+        }
+
+        @Nested
+        @DisplayName("Supports custom delimiter")
+        class CustomDelimiter {
+            @Test
+            void supports_semicolon_as_a_custom_delimiter() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("//;\n1;2");
+                Assertions.assertEquals(3, additionResult);
+            }
+
+            @Test
+            void supports_dollar_as_a_custom_delimiter() {
+                Calculator calculator = new Calculator();
+                int additionResult = calculator.add("//$\n1$2");
+                Assertions.assertEquals(3, additionResult);
             }
         }
     }

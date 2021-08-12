@@ -16,15 +16,26 @@ public class Calculator {
     }
 
     private List<Integer> parseNumbers(String numbers) {
-        String delimiter = "[\\n,]";
+        String delimiterPattern = "[\\n|,]";
         String delimitedNumbers = numbers;
         if (containsCustomDelimiterSyntax(numbers)) {
-            delimiter = Pattern.quote(StringUtils.substringBetween(numbers, "//", "\n"));
+            String delimiters = StringUtils.substringBetween(numbers, "//", "\n");
+            delimiterPattern = getDelimiterPattern(delimiters);
             delimitedNumbers = StringUtils.substringAfter(numbers, "\n");
         }
-        return stream(delimitedNumbers.split(delimiter)).map(Integer::parseInt)
+        return stream(delimitedNumbers.split(delimiterPattern)).map(Integer::parseInt)
                 .filter(number -> number <= 1000)
                 .collect(Collectors.toList());
+    }
+
+    private String getDelimiterPattern(String delimiters) {
+        return stream(delimiters
+                .replace("][", "|")
+                .replace("[", "")
+                .replace("]", "")
+                .split("\\|"))
+                .map(Pattern::quote)
+                .collect(Collectors.joining("|"));
     }
 
     private boolean containsCustomDelimiterSyntax(String numbers) {

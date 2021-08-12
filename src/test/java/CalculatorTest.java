@@ -150,11 +150,29 @@ public class CalculatorTest {
             @Test
             void supports_hundred_stars_as_a_custom_delimiter() {
                 Calculator calculator = new Calculator();
-                var hundredStars = Collections.nCopies(100, "*");
+                var hundredStars = "*".repeat(100);
 
                 int additionResult = calculator.add("//" + hundredStars + "\n1" + hundredStars + "2");
 
                 Assertions.assertEquals(3, additionResult);
+            }
+
+            @Nested
+            @DisplayName("Multiple custom delimiters")
+            class MultipleCustomDelimiters {
+                @Test
+                void supports_star_and_percentage_delimiters_at_once() {
+                    Calculator calculator = new Calculator();
+                    int additionResult = calculator.add("//[*][%]\n1*2%3");
+                    Assertions.assertEquals(6, additionResult);
+                }
+
+                @Test
+                void supports_four_delimiters_at_once() {
+                    Calculator calculator = new Calculator();
+                    int additionResult = calculator.add("//[*][%][$][#]\n1*2%3$4#5");
+                    Assertions.assertEquals(15, additionResult);
+                }
             }
         }
 
